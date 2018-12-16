@@ -13,7 +13,7 @@ export interface InfosGeoloc {
 
 export interface InfosDiagnosticGps {
   isGpsLocationAvailable?: boolean;
-  isGpsLocationEnabled?: boolean;
+  isGpsLocationEnabled?: string;
   isLocationEnabled?: boolean;
   isLocationAuthorized?: boolean;
   locationAuthorizationStatus?: boolean;
@@ -52,7 +52,6 @@ export class GpsService {
   }
 
   public watchGps() {
-
     if (
       this.infosDiagnosticGps.isLocationEnabled && // localistion activé
       this.infosDiagnosticGps.requestLocationAuthorization === 'GRANTED' && // ocalistion autorisé
@@ -94,7 +93,7 @@ export class GpsService {
 
     // Vérifie si le GPS haute précision est activé (Android uniquement)
     this.diagnostic.isGpsLocationEnabled().then(
-      (isGpsLocationEnabled: boolean) => {
+      (isGpsLocationEnabled: string) => {
         this.infosDiagnosticGps.isGpsLocationEnabled = isGpsLocationEnabled;
         this.infosDiagnosticGpsSubject.next(this.infosDiagnosticGps);
         this.watchGps();
@@ -138,4 +137,7 @@ export class GpsService {
       });
   }
 
+  openSettingsGps() {
+    this.diagnostic.switchToLocationSettings();
+  }
 }

@@ -13,7 +13,7 @@ export class Tab1Page {
 
   constructor(private gpsService: GpsService) {
 
-     // Ecoute les coordonées GPS (longitude, latitude, timetamp de la dérniere mise a jour de position)
+    // Ecoute les coordonées GPS (longitude, latitude, timetamp de la dérniere mise a jour de position)
     this.gpsService.infosGeolocSubject.subscribe(
       (infosGeoloc: InfosGeoloc) => {
         this.infosGeoloc = infosGeoloc;
@@ -23,7 +23,11 @@ export class Tab1Page {
     this.gpsService.infosDiagnosticGpsSubject.subscribe(
       (infosDiagnosticGps: InfosDiagnosticGps) => {
         this.infosDiagnosticGps = infosDiagnosticGps;
+        setInterval(() => { console.log(infosDiagnosticGps); }, 100);
       });
   }
 
+  openSettingsGps() {
+    this.gpsService.openSettingsGps();
+  }
 }
