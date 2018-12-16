@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Tab One
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+ 
+
+    <ion-card class="welcome-card">
+      <ion-img src="/assets/shapes.svg"></ion-img>
+      <ion-card-header>
+        <ion-card-subtitle>Get Started</ion-card-subtitle>
+        <ion-card-title>Welcome to Ionic</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        Status gps: 
+        <ion-label *ngIf="infosDiagnosticGps.isLocationEnabled" >GPS activé</ion-label>
+        <ion-label *ngIf="!infosDiagnosticGps.isLocationEnabled" >GPS désactivé</ion-label><br>
+
+        Status gps Haute précision: 
+        <ion-label *ngIf="infosDiagnosticGps.isGpsLocationEnabled" >GPS activé</ion-label>
+        <ion-label *ngIf="!infosDiagnosticGps.isGpsLocationEnabled" >GPS désactivé</ion-label><br>
+
+        Status gps droit: 
+        <ion-label *ngIf="infosDiagnosticGps.requestLocationAuthorization == 'GRANTED'" >Droit autorisé</ion-label>
+        <ion-label *ngIf="infosDiagnosticGps.requestLocationAuthorization == 'DENIED'" >Droit non autorisé</ion-label><br>
+
+
+        position latitude :  <ion-label>{{infosGeoloc.latitude}}</ion-label>
+        position longitude :  <ion-label>{{infosGeoloc.longitude}}</ion-label>
+      </ion-card-content>
+    </ion-card>
+    <ion-list lines="none">
+      <ion-list-header>
+        <ion-label>Resources</ion-label>
+      </ion-list-header>
+      <ion-item (click)="geoloc()">
+        <ion-icon slot="start" color="medium" name="book"></ion-icon>
+        Status gps: 
+        <ion-label *ngIf="infosDiagnosticGps.isLocationEnabled" >GPS activé</ion-label>
+        <ion-label *ngIf="!infosDiagnosticGps.isLocationEnabled" >GPS désactivé</ion-label><br>
+
+        Status gps Haute précision: 
+        <ion-label *ngIf="infosDiagnosticGps.isGpsLocationEnabled" >GPS activé</ion-label>
+        <ion-label *ngIf="!infosDiagnosticGps.isGpsLocationEnabled" >GPS désactivé</ion-label><br>
+
+        Status gps droit: 
+        <ion-label *ngIf="infosDiagnosticGps.isLocationAuthorized" >Droit autorisé</ion-label>
+        <ion-label *ngIf="!infosDiagnosticGps.locationAuthorizationStatus" >Droit non autorisé</ion-label><br>
+
+
+        position latitude :  <ion-label>{{infosGeoloc.latitude}}</ion-label>
+        position longitude :  <ion-label>{{infosGeoloc.longitude}}</ion-label>
+      </ion-item>
+      <ion-item href="https://beta.ionicframework.com/docs/building/scaffolding">
+        <ion-icon slot="start" color="medium" name="build"></ion-icon>
+        <ion-label>Scaffold Out Your App</ion-label>
+      </ion-item>
+      <ion-item href="https://beta.ionicframework.com/docs/layout/structure">
+        <ion-icon slot="start" color="medium" name="grid"></ion-icon>
+        <ion-label>Change Your App Layout</ion-label>
+      </ion-item>
+      <ion-item href="https://beta.ionicframework.com/docs/theming/basics">
+        <ion-icon slot="start" color="medium" name="color-fill"></ion-icon>
+        <ion-label>Theme Your App</ion-label>
+      </ion-item>
+    </ion-list>
+</ion-content>
