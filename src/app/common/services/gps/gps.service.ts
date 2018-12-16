@@ -41,7 +41,6 @@ export class GpsService {
     this.platform.ready().then(
       () => {
         this.getDiagnosticLocation();
-        this.watchGps();
         // A chaque changement de statut du GPS (désactivé les droits du GPS, désactivé le GPS...)
         this.diagnostic.registerLocationStateChangeHandler(() => {
           this.getDiagnosticLocation();
@@ -54,9 +53,13 @@ export class GpsService {
 
   public watchGps() {
 
+    if (
+      this.infosDiagnosticGps.isLocationEnabled && // localistion activé
+      this.infosDiagnosticGps.requestLocationAuthorization === 'GRANTED' && // ocalistion autorisé
+      !this.subscriptionGeoloc // Jamais souscris a la position
+    ) {
       console.log('watch');
       this.subscriptionGeoloc = this.geolocation.watchPosition();
-
       this.subscriptionGeoloc.subscribe(
 
         (position: Geoposition) => {
@@ -76,7 +79,7 @@ export class GpsService {
           console.log('subscriptionGeoloc complete');
         }
       );
-
+    }
   }
 
   public getDiagnosticLocation() {
@@ -86,6 +89,7 @@ export class GpsService {
       (isGpsLocationAvailable: boolean) => {
         this.infosDiagnosticGps.isGpsLocationAvailable = isGpsLocationAvailable;
         this.infosDiagnosticGpsSubject.next(this.infosDiagnosticGps);
+        this.watchGps();
       });
 
     // Vérifie si le GPS haute précision est activé (Android uniquement)
@@ -93,6 +97,7 @@ export class GpsService {
       (isGpsLocationEnabled: boolean) => {
         this.infosDiagnosticGps.isGpsLocationEnabled = isGpsLocationEnabled;
         this.infosDiagnosticGpsSubject.next(this.infosDiagnosticGps);
+        this.watchGps();
       });
 
     // Vérifie si le service de géoloc est activé (Android, iOS)
@@ -100,6 +105,7 @@ export class GpsService {
       (isLocationEnabled: boolean) => {
         this.infosDiagnosticGps.isLocationEnabled = isLocationEnabled;
         this.infosDiagnosticGpsSubject.next(this.infosDiagnosticGps);
+        this.watchGps();
       });
 
     // Vérifie si l'application est autorisée à utiliser l'emplacement.
@@ -112,13 +118,15 @@ export class GpsService {
       (isLocationAuthorized: boolean) => {
         this.infosDiagnosticGps.isLocationAuthorized = isLocationAuthorized;
         this.infosDiagnosticGpsSubject.next(this.infosDiagnosticGps);
+        this.watchGps();
       });
 
-    // Vérifie les droits de localisation
+    // Demande les droits de localisation (modal système)
     this.diagnostic.requestLocationAuthorization().then(
       (requestLocationAuthorization: string) => {
         this.infosDiagnosticGps.requestLocationAuthorization = requestLocationAuthorization;
         this.infosDiagnosticGpsSubject.next(this.infosDiagnosticGps);
+        this.watchGps();
       });
 
     // Renvoie le statut d'autorisation d'emplacement pour l'application. (Android ,iOS)
@@ -126,6 +134,7 @@ export class GpsService {
       (locationAuthorizationStatus: boolean) => {
         this.infosDiagnosticGps.locationAuthorizationStatus = locationAuthorizationStatus;
         this.infosDiagnosticGpsSubject.next(this.infosDiagnosticGps);
+        this.watchGps();
       });
   }
 
